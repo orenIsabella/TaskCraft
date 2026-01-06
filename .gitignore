@@ -15,7 +15,7 @@ dist/
 *.egg-info/
 
 # Editors and IDEs (customize as needed)
-.idea/  # For PyCharm/IntelliJ
+/.idea/  # For PyCharm/IntelliJ
 .vscode/ # For VS Code (can be more specific)
 *.swp   # For Vim
 
