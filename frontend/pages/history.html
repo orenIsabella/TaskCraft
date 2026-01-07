@@ -1,0 +1,52 @@
+<!-- History Page -->
+<div class="history-page">
+    <!-- Filters Section -->
+    <div class="card" style="padding: 1.5rem;">
+        <div class="filter-header">
+            <h2 class="section-heading">Filters</h2>
+            <button class="btn btn-xs btn-text" id="reset-filters">
+                <span class="material-symbols-outlined icon-sm">filter_alt_off</span>
+                <span>Reset</span>
+            </button>
+        </div>
+        <div class="filter-controls-compact">
+            <!-- Search -->
+            <div class="filter-group-compact">
+                <input type="text" id="filter-text" class="filter-input" placeholder="Search events...">
+            </div>
+
+            <!-- Date Range -->
+            <div class="filter-group-compact">
+                <input type="date" id="filter-date-from" class="filter-input">
+            </div>
+
+            <div class="filter-group-compact">
+                <input type="date" id="filter-date-to" class="filter-input">
+            </div>
+
+            <!-- Event Type Multi-Select -->
+            <div class="filter-group-compact" id="type-filter-container">
+                <!-- Multi-select will be inserted here -->
+            </div>
+
+            <!-- Status Multi-Select -->
+            <div class="filter-group-compact" id="status-filter-container">
+                <!-- Multi-select will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Events List -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="section-heading">Event History</h2>
+            <span id="result-count" style="font-size: var(--text-sm); color: var(--color-text-secondary);">Loading...</span>
+        </div>
+        <div id="history-list" class="list-container custom-scrollbar" style="min-height: 300px;">
+            <!-- Events will be rendered here -->
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div id="pagination-container"></div>
+</div>

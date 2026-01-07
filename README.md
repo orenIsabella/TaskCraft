@@ -7,6 +7,13 @@
 uv run uvicorn app.main:app --reload
 ```
 
+#### Frontend Development
+Serve the frontend with SPA routing support:
+```
+npx serve -p 8080 -s frontend
+```
+The `-s` flag enables single-page app mode, allowing client-side routing to work correctly.
+
 #### Using Docker Compose
 
 To start all services:
