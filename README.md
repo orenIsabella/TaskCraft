@@ -84,3 +84,19 @@ Tests automatically generate coverage reports. View the HTML report:
 open htmlcov/index.html  # macOS
 xdg-open htmlcov/index.html  # Linux
 ```
+
+### Docker Sanity Checks
+
+Test the full Docker stack (app + database):
+```bash
+./test-docker.sh
+```
+
+This script:
+- Builds the Docker containers
+- Starts the application and PostgreSQL
+- Waits for services to be ready
+- Sanity checks API endpoints with curl
+- Cleans up automatically
+
+**Note:** Requires `jq` for JSON formatting. Install with `apt install jq` (Linux) or `brew install jq` (macOS).
