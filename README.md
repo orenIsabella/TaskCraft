@@ -35,3 +35,52 @@ docker compose -f docker-compose.dev.yml exec db psql -U dev -d myapp_dev
 
 #### Tear down
 docker compose -f docker-compose.dev.yml down
+
+## Testing
+
+### Setup
+Install development dependencies:
+```bash
+uv sync --extra dev
+```
+
+### Running Tests
+
+Run all tests:
+```bash
+uv run pytest
+```
+
+Run only unit tests:
+```bash
+uv run pytest -m unit
+```
+
+Run only integration tests:
+```bash
+uv run pytest -m integration
+```
+
+Run tests with verbose output:
+```bash
+uv run pytest -v
+```
+
+Run tests without coverage:
+```bash
+uv run pytest --no-cov
+```
+
+### Test Structure
+
+- `tests/unit/` - Fast, isolated unit tests
+- `tests/integration/` - Full application flow tests
+- `tests/conftest.py` - Shared fixtures and configuration
+
+### Coverage
+
+Tests automatically generate coverage reports. View the HTML report:
+```bash
+open htmlcov/index.html  # macOS
+xdg-open htmlcov/index.html  # Linux
+```

@@ -13,7 +13,7 @@ class ThemeManager {
     this.currentTheme = DEFAULT_THEME;
     this.listeners = [];
 
-    // Available themes
+    // Available themes (dark themes first, then light themes)
     this.themes = {
       default: 'Golden Hour',
       ocean: 'Ocean Blue',
@@ -21,6 +21,9 @@ class ThemeManager {
       midnight: 'Midnight Purple',
       sunset: 'Sunset Orange',
       rose: 'Rose Pink',
+      daylight: 'Daylight',
+      cloud: 'Cloud',
+      meadow: 'Meadow',
     };
 
     // Load saved theme

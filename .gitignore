@@ -27,3 +27,6 @@ Thumbs.db # Windows
 # Logs and database files (if local)
 *.log
 *.sqlite3
+/.playwright-mcp/
+/.idea/
+.coverage
