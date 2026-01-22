@@ -4,13 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-TaskCraft is a Python FastAPI backend with a vanilla JavaScript frontend. Uses uv for package management and Docker Compose for development.
+TaskCraft is a Python FastAPI backend with a SolidJS + TypeScript frontend. Uses uv for Python package management and npm for frontend. Docker Compose for development.
 
 ## Development Commands
 
 ### Running Locally
+
+Backend:
 ```bash
 uv run uvicorn app.main:app --reload
+```
+
+Frontend:
+```bash
+cd frontend
+npm run dev
 ```
 
 ### Docker Development
@@ -42,14 +50,17 @@ docker compose -f docker-compose.dev.yml exec db psql -U dev -d myapp_dev
 ## Architecture
 
 - **Backend**: FastAPI app in `app/` with entry point at `app/main.py`
-- **Frontend**: Static HTML/JS in `frontend/`, served by Nginx in production
+- **Frontend**: SolidJS + TypeScript app in `frontend/src/`, built with Vite
 - **Database**: PostgreSQL 18, migrations via Alembic
 - **Nginx**: Reverse proxy config in `config/nginx.conf` - routes `/api` to backend, serves static files from `frontend/`
 
 ## Tech Stack
 
 - Python 3.10+ with FastAPI
-- uv for dependency management
+- uv for Python dependency management
+- SolidJS with Solid Router for frontend
+- TypeScript for type safety
+- Vite for frontend build tool
 - PostgreSQL 18
 - Docker/Docker Compose
 - Nginx for production serving

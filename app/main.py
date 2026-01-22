@@ -1,9 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import logging
+import os
 
 app = FastAPI()
 logger = logging.getLogger(__name__)
+
+# Configure logging level from environment variable
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+logging.basicConfig(
+    level=getattr(logging, log_level, logging.INFO),
+    format="%(asctime)s | %(levelname)-8s | %(module)s:%(funcName)s:%(lineno)d - %(message)s"
+)
+
 
 # CORS if needed during development
 app.add_middleware(
@@ -42,12 +51,14 @@ class TaskCreateResponse(BaseModel):
 
 @app.post("/api/tasks", response_model=TaskCreateResponse)
 async def create_task(payload: TaskCreateRequest):
-    logger.info("Creating task from text: %s", payload.text)
+    logger.info("Creating task from text: %s" % payload.text)
     try:
         event_dict = await extract_event_from_text(payload.text, payload.timezone)
     except OpenRouterError as e:
+        logger.error('Failed to send OpenRouter request: %s' % str(e))
         raise HTTPException(status_code=503, detail=str(e))
 
+    logger.info("Response: %s" % str(event_dict))
     return TaskCreateResponse(
         raw_text=payload.text,
         event=EventDraft(**event_dict),

@@ -17,7 +17,7 @@ import { openPrivacyModal, openTermsModal } from './components/legal-modals.js';
  */
 async function loadPage(pageName) {
   try {
-    const html = await loadHTML(`/pages/${pageName}.html`);
+    const html = await loadHTML(`/pages/${pageName}`);
     return html;
   } catch (error) {
     console.error(`Failed to load page: ${pageName}`, error);
@@ -45,10 +45,17 @@ function initDashboard() {
         generateBtn.disabled = true;
         generateBtn.textContent = 'Generating...';
 
-        // TODO: Call API to generate calendar events from task
-        const response = await api.post('/tasks/generate', { text: taskText });
+        // Call API to generate calendar events from task
+        const user = auth.getUser();
+        const payload = {
+          text: taskText,
+          email: user ? user.email : null,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Jerusalem"
+        };
 
-        console.log('Generated tasks:', response);
+        const response = await api.post('/tasks', payload);
+
+        console.log('Generated task output:', response);
 
         // Clear input on success
         taskInput.value = '';
