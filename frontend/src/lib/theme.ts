@@ -18,6 +18,7 @@ const THEMES: Record<string, string> = {
   daylight: 'Daylight',
   cloud: 'Cloud',
   meadow: 'Meadow',
+  pastel: 'Pastel',
 };
 
 function loadTheme(): string {

@@ -42,17 +42,26 @@ docker compose -f docker-compose.dev.yml exec app uv run alembic upgrade head
 docker compose -f docker-compose.dev.yml exec db psql -U dev -d myapp_dev
 ```
 
-### Deployment
+### Production Deployment
 ```bash
-./deploy.sh  # Pulls latest, rebuilds containers, runs migrations
+# Full production deployment (frontend + backend bundled)
+./deploy-prod.sh
+
+# Development deployment (backend only)
+./deploy.sh
 ```
+
+See `DEPLOYMENT.md` for detailed production deployment guide.
 
 ## Architecture
 
 - **Backend**: FastAPI app in `app/` with entry point at `app/main.py`
 - **Frontend**: SolidJS + TypeScript app in `frontend/src/`, built with Vite
+  - CSS is modular: `css/themes.css`, `css/common.css`, `css/utilities.css`, `css/components/`, `css/pages/`
 - **Database**: PostgreSQL 18, migrations via Alembic
-- **Nginx**: Reverse proxy config in `config/nginx.conf` - routes `/api` to backend, serves static files from `frontend/`
+- **Nginx**: Reverse proxy configs:
+  - `config/nginx.conf` - Host nginx configuration
+  - `config/nginx-docker.conf` - Docker container nginx configuration
 
 ## Tech Stack
 

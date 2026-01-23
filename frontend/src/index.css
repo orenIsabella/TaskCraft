@@ -1,2 +1,27 @@
-@import '../css/common.css';
+/* ============================================
+   CSS ENTRY POINT
+   Import order: themes → base → utilities → components → pages
+   ============================================ */
+
+/* 1. Theme Variables (must load first) */
 @import '../css/themes.css';
+
+/* 2. Base Styles & Layout */
+@import '../css/common.css';
+
+/* 3. Utilities (reusable utility classes) */
+@import '../css/utilities.css';
+
+/* 4. Components */
+@import '../css/components/badges.css';
+@import '../css/components/buttons.css';
+@import '../css/components/cards.css';
+@import '../css/components/forms.css';
+@import '../css/components/modals.css';
+@import '../css/components/other.css';
+
+/* 5. Pages */
+@import '../css/pages/auth.css';
+@import '../css/pages/dashboard.css';
+@import '../css/pages/help-about.css';
+@import '../css/pages/history.css';

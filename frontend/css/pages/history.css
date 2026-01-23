@@ -1,0 +1,163 @@
+/* ============================================
+   HISTORY PAGE STYLES
+   Note: Theme variables are imported via index.css
+   ============================================ */
+
+/* ============================================
+   PAGE LAYOUT
+   ============================================ */
+.history-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ============================================
+   EVENT ITEMS
+   ============================================ */
+.event-item {
+  position: relative;
+}
+
+.event-item[data-status="failed"] {
+  border-left: 3px solid var(--color-status-purple);
+}
+
+.event-item[data-status="pending"] {
+  opacity: 0.7;
+}
+
+.list-item-text.truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================
+   EVENT DETAILS
+   ============================================ */
+.event-details h3 {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-details h3:first-child {
+  margin-top: 0;
+}
+
+.event-details p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ============================================
+   EVENT ACTIONS
+   ============================================ */
+.event-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-icon-sm {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon-sm:hover {
+  background-color: var(--color-surface-highlight-alpha-30);
+  color: var(--color-primary);
+}
+
+.feedback-btn {
+  position: relative;
+}
+
+.feedback-btn.active {
+  color: var(--color-primary);
+  background-color: var(--color-surface-highlight-alpha-30);
+}
+
+.feedback-btn.active.up {
+  color: var(--color-status-green);
+}
+
+.feedback-btn.active.down {
+  color: var(--color-status-purple);
+}
+
+.btn-xs {
+  height: 2rem;
+  padding: 0 0.75rem;
+  font-size: var(--text-xs);
+}
+
+.retry-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ============================================
+   STATUS BADGES
+   ============================================ */
+.status-badge-success {
+  background-color: var(--color-status-green-bg);
+  color: var(--color-status-green);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-badge-failed {
+  background-color: var(--color-status-purple-bg);
+  color: var(--color-status-purple);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-badge-pending {
+  background-color: var(--color-status-blue-bg);
+  color: var(--color-status-blue);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+/* ============================================
+   RESPONSIVE FILTERS
+   ============================================ */
+@media (min-width: 768px) {
+  .filter-controls-compact {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .filter-controls-compact {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  }
+}

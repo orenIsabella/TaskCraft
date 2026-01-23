@@ -1,0 +1,255 @@
+/* ============================================
+   MODAL COMPONENT
+   Base modal structure and variants
+   ============================================ */
+
+/* Modal Overlay & Container */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.modal-overlay.modal-open {
+  opacity: 1;
+}
+
+.modal-container {
+  background-color: var(--color-surface-dark);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-border);
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.9);
+  transition: transform var(--transition-base);
+}
+
+.modal-open .modal-container {
+  transform: scale(1);
+}
+
+/* Modal Sizes */
+.modal-small {
+  width: 400px;
+}
+
+.modal-medium {
+  width: 600px;
+}
+
+.modal-large {
+  width: 800px;
+}
+
+.modal-full {
+  width: 95vw;
+  height: 95vh;
+}
+
+/* Modal Sections */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.modal-close {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  border: none;
+  background-color: var(--color-surface-highlight);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+}
+
+.modal-close:hover {
+  background-color: var(--color-surface-highlight-hover);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Modal Content Styles */
+.modal-content-text {
+  line-height: 1.6;
+}
+
+.modal-content-text section {
+  margin-bottom: 1.5rem;
+}
+
+.modal-content-text section:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.modal-content-text h3 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.modal-content-text p {
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.modal-content-text p:last-child {
+  margin-bottom: 0;
+}
+
+.modal-footer-text {
+  margin-top: 2rem;
+}
+
+/* ============================================
+   SETTINGS MODAL
+   ============================================ */
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.settings-section {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings-section-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.settings-section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem;
+  background-color: var(--color-surface-highlight-alpha-30);
+  border-radius: var(--radius-lg);
+  transition: background-color var(--transition-fast);
+}
+
+.setting-row:hover {
+  background-color: var(--color-surface-highlight);
+}
+
+.setting-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.setting-label .material-symbols-outlined {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.setting-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.setting-description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+/* ============================================
+   LEGAL MODALS (Privacy Policy, Terms of Service)
+   ============================================ */
+.legal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.legal-updated {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  font-style: italic;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.legal-intro {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  padding: 1rem;
+  background-color: var(--color-surface-highlight-alpha-30);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid var(--color-primary);
+}
+
+.legal-section {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.legal-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.legal-section-title {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.legal-section-content {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}

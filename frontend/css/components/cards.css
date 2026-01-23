@@ -1,0 +1,51 @@
+/* ============================================
+   CARDS
+   Card components and variations
+   ============================================ */
+
+/* Base Card */
+.card {
+  background-color: var(--color-surface-dark);
+  border-radius: var(--radius-2xl);
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  position: relative;
+}
+
+/* Card Variants */
+.card-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-dark);
+  overflow: hidden;
+}
+
+.card-hero {
+  padding: 2.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-surface-dark) 0%, var(--color-surface-highlight) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card Sections */
+.card-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+/* Card Modifiers */
+.card-input {
+  padding: 2rem;
+}
+
+.card-centered {
+  padding: 2rem;
+  text-align: center;
+}
