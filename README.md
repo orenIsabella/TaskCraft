@@ -8,11 +8,12 @@ uv run uvicorn app.main:app --reload
 ```
 
 #### Frontend Development
-Serve the frontend with SPA routing support:
+The frontend uses Vite + SolidJS. Start the development server:
 ```
-npx serve -p 8080 -s frontend
+cd frontend
+npm run dev
 ```
-The `-s` flag enables single-page app mode, allowing client-side routing to work correctly.
+This starts Vite with hot module replacement on http://localhost:5173/
 
 #### Using Docker Compose
 

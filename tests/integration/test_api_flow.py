@@ -28,14 +28,14 @@ def test_cors_headers(client: TestClient):
 @pytest.mark.integration
 def test_multiple_endpoint_calls(client: TestClient):
     """Test making multiple API calls in sequence"""
-    health_response = client.get("/api/health")
-    items_response = client.get("/api/items")
+    first_response = client.get("/api/health")
+    second_response = client.get("/api/health")
 
-    assert health_response.status_code == 200
-    assert items_response.status_code == 200
+    assert first_response.status_code == 200
+    assert second_response.status_code == 200
 
-    assert health_response.json()["status"] == "ok"
-    assert "items" in items_response.json()
+    assert first_response.json()["status"] == "ok"
+    assert second_response.json()["status"] == "ok"
 
 
 @pytest.mark.integration

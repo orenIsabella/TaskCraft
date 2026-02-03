@@ -1,0 +1,198 @@
+/* ============================================
+   HELP & ABOUT PAGES
+   ============================================ */
+
+/* ============================================
+   PAGE LAYOUT
+   ============================================ */
+.help-page,
+.about-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.about-hero {
+  padding: 3rem;
+}
+
+.about-hero-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-2xl);
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.about-hero-icon svg {
+  width: 3rem;
+  height: 3rem;
+  color: var(--color-text-dark);
+}
+
+/* ============================================
+   HELP SECTION
+   ============================================ */
+.help-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.help-step {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.help-step-number {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: var(--color-text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.help-step-content {
+  flex: 1;
+}
+
+.help-step-content h3 {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.help-step-content p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.help-example {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-surface-highlight-alpha-30);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  font-style: italic;
+}
+
+.help-example .material-symbols-outlined {
+  color: var(--color-primary);
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   FEATURES GRID
+   ============================================ */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.feature-card {
+  padding: 1.5rem;
+  background-color: var(--color-surface-highlight-alpha-30);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-base);
+}
+
+.feature-card:hover {
+  background-color: var(--color-surface-highlight);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.feature-icon .material-symbols-outlined {
+  font-size: 28px;
+  color: var(--color-primary);
+}
+
+.feature-card h3 {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ============================================
+   FAQ SECTION
+   ============================================ */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.faq-item {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.faq-item h3 {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.faq-item p {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* ============================================
+   RESPONSIVE LAYOUT
+   ============================================ */
+@media (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

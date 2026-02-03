@@ -9,65 +9,9 @@
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <!-- Styles -->
-    <link href="css/common.css" rel="stylesheet"/>
 </head>
 <body>
-<div class="page-wrapper">
-    <!-- Top Navigation -->
-    <header class="header" id="main-header">
-        <div class="header-logo">
-            <a href="/" data-link>
-                <div class="logo-icon">
-                    <svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                        <path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
-                    </svg>
-                </div>
-            </a>
-            <h2 class="logo-text">TaskCraft</h2>
-        </div>
-        <div class="header-actions">
-            <div class="header-buttons" id="auth-buttons">
-                <a href="/settings" data-link class="btn btn-icon btn-secondary">
-                    <span class="material-symbols-outlined icon-lg">settings</span>
-                </a>
-                <a href="/help" data-link class="btn btn-icon btn-secondary">
-                    <span class="material-symbols-outlined icon-lg">help</span>
-                </a>
-            </div>
-            <div id="user-menu">
-                <!-- User menu will be injected here -->
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content Area (Router Target) -->
-    <main class="main-container" id="app">
-        <!-- Page content will be loaded here by the router -->
-    </main>
-
-    <!-- Footer -->
-    <footer class="app-footer">
-        <div class="footer-content">
-            <div class="footer-left">
-                <span class="footer-text">TaskCraft v1.0.0</span>
-                <span class="footer-divider">•</span>
-                <span class="footer-text">© 2026 TaskCraft</span>
-            </div>
-            <div class="footer-links">
-                <a href="#" class="footer-link" id="privacy-link">Privacy Policy</a>
-                <span class="footer-divider">•</span>
-                <a href="#" class="footer-link" id="terms-link">Terms of Service</a>
-                <span class="footer-divider">•</span>
-                <a href="/about" data-link class="footer-link">About</a>
-                <span class="footer-divider">•</span>
-                <a href="/help" data-link class="footer-link">Help</a>
-            </div>
-        </div>
-    </footer>
-</div>
-
-<!-- App JavaScript (ES6 Module) -->
-<script type="module" src="js/app.js"></script>
+<div id="root"></div>
+<script type="module" src="/src/index.tsx"></script>
 </body>
 </html>

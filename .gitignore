@@ -23,6 +23,9 @@ dist/
 .DS_Store # macOS
 Thumbs.db # Windows
 
+# Node
+node_modules/
+
 # Miscellaneous
 # Logs and database files (if local)
 *.log
@@ -35,4 +38,5 @@ htmlcov/
 # Environment files
 .env.test
 .env.local
-/.env
+.env.dev
+.env

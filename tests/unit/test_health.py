@@ -8,7 +8,9 @@ def test_health_endpoint(client: TestClient):
     response = client.get("/api/health")
 
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    data = response.json()
+    assert data["status"] == "ok"
+    assert data["database"] == "connected"  # Mock returns successful connection
 
 
 @pytest.mark.unit

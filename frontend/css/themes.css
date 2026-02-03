@@ -205,6 +205,31 @@
   --decal-color: 0, 0, 0;
 }
 
+/* Light Theme 4: Pastel (Soft purple-mint light theme) */
+[data-theme="pastel"] {
+  --color-primary: #CCA8E9;
+  --color-primary-hover: #b88dd4;
+  --color-primary-light: rgba(204, 168, 233, 0.1);
+  --color-primary-shadow: rgba(204, 168, 233, 0.15);
+
+  --color-bg-dark: #DEFCF9;
+  --color-surface-dark: #CADEFC;
+  --color-surface-highlight: #C3BEF0;
+  --color-surface-highlight-hover: #b3a8e0;
+  --color-surface-highlight-alpha-30: rgba(195, 190, 240, 0.6);
+
+  --color-text-primary: #2d1b3d;
+  --color-text-secondary: #6b5580;
+  --color-text-placeholder: rgba(107, 85, 128, 0.6);
+  --color-text-dark: #2d1b3d;
+
+  --color-border: #C3BEF0;
+  --color-divider: rgba(0, 0, 0, 0.06);
+
+  --decal-opacity: 0.04;
+  --decal-color: 107, 85, 128;
+}
+
 /* ============================================
    DESIGN TOKENS (Non-color variables)
    ============================================ */
