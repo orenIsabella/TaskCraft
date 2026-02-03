@@ -22,6 +22,9 @@ npm run dev
 ```
 
 ### Docker Development
+
+**Important**: Set environment variables via `.env.dev` file (gitignored). Copy from `.env.example` and fill in your values.
+
 ```bash
 # Start all services (app + PostgreSQL)
 docker compose -f docker-compose.dev.yml --env-file .env.dev up
@@ -38,8 +41,8 @@ docker compose -f docker-compose.dev.yml --env-file .env.dev exec app uv run ale
 # Apply migrations
 docker compose -f docker-compose.dev.yml --env-file .env.dev exec app uv run alembic upgrade head
 
-# Direct database access
-docker compose -f docker-compose.dev.yml --env-file .env.dev exec db psql -U dev -d myapp_dev
+# Direct database access (use credentials from your .env.dev)
+docker compose -f docker-compose.dev.yml --env-file .env.dev exec db psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 ```
 
 ## Architecture
