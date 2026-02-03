@@ -24,22 +24,22 @@ npm run dev
 ### Docker Development
 ```bash
 # Start all services (app + PostgreSQL)
-docker compose -f docker-compose.dev.yml up
+docker compose -f docker-compose.dev.yml --env-file .env.dev up
 
 # Stop services
-docker compose -f docker-compose.dev.yml down
+docker compose -f docker-compose.dev.yml --env-file .env.dev down
 ```
 
 ### Database
 ```bash
 # Create migration
-docker compose -f docker-compose.dev.yml exec app uv run alembic revision --autogenerate -m "description"
+docker compose -f docker-compose.dev.yml --env-file .env.dev exec app uv run alembic revision --autogenerate -m "description"
 
 # Apply migrations
-docker compose -f docker-compose.dev.yml exec app uv run alembic upgrade head
+docker compose -f docker-compose.dev.yml --env-file .env.dev exec app uv run alembic upgrade head
 
 # Direct database access
-docker compose -f docker-compose.dev.yml exec db psql -U dev -d myapp_dev
+docker compose -f docker-compose.dev.yml --env-file .env.dev exec db psql -U dev -d myapp_dev
 ```
 
 ## Architecture

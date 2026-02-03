@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -41,15 +41,22 @@ jobs:
 
       - name: Create test environment file
         run: |
-          cat > .env.test <<EOF
+          cat > .env.ci <<EOF
+          OPENROUTER_API_KEY=test-key
+          OPENROUTER_APP_TITLE=TaskCraft_CI
+          OPENROUTER_APP_REFERER=TaskCraft_CI
+          OPENROUTER_MODEL=anthropic/claude-3.5-haiku
           POSTGRES_USER=test
           POSTGRES_PASSWORD=test
           POSTGRES_DB=myapp_test
+          POSTGRES_HOST=db
+          POSTGRES_PORT=5432
           DEBUG=true
+          LOG_LEVEL=DEBUG
           EOF
 
       - name: Build and start services
-        run: docker compose -f docker-compose.dev.yml --env-file .env.test up -d --build
+        run: docker compose -f docker-compose.dev.yml --env-file .env.ci up -d --build
 
       - name: Wait for services to be ready
         run: |
@@ -67,8 +74,8 @@ jobs:
 
       - name: Show logs on failure
         if: failure()
-        run: docker compose -f docker-compose.dev.yml logs
+        run: docker compose -f docker-compose.dev.yml --env-file .env.ci logs
 
       - name: Tear down services
         if: always()
-        run: docker compose -f docker-compose.dev.yml down -v
+        run: docker compose -f docker-compose.dev.yml --env-file .env.ci down -v

@@ -1,17 +1,30 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import logging
-import os
+from contextlib import asynccontextmanager
+from app.config import settings
+from app.database import engine
 
-app = FastAPI()
 logger = logging.getLogger(__name__)
 
 # Configure logging level from environment variable
-log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(
-    level=getattr(logging, log_level, logging.INFO),
+    level=getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO),
     format="%(asctime)s | %(levelname)-8s | %(module)s:%(funcName)s:%(lineno)d - %(message)s"
 )
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage application lifecycle"""
+    logger.info("Starting up application...")
+    logger.info(f"Database URL: {settings.DATABASE_URL.split('@')[1]}")  # Log DB host (not credentials)
+    yield
+    logger.info("Shutting down application...")
+    await engine.dispose()
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 # CORS if needed during development
@@ -24,7 +37,24 @@ app.add_middleware(
 
 @app.get("/api/health")
 async def health():
-    return {"status": "ok"}
+    """Health check endpoint with database connectivity test"""
+    from sqlalchemy import text
+    from app.database import AsyncSessionLocal
+
+    db_status = "unknown"
+    try:
+        async with AsyncSessionLocal() as session:
+            result = await session.execute(text("SELECT 1"))
+            result.scalar()
+            db_status = "connected"
+    except Exception as e:
+        logger.error(f"Database health check failed: {e}")
+        db_status = "disconnected"
+
+    return {
+        "status": "ok",
+        "database": db_status
+    }
 
 from pydantic import BaseModel, Field
 from typing import Optional, List
