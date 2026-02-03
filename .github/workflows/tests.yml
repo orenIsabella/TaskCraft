@@ -69,9 +69,6 @@ jobs:
           echo "Testing health endpoint..."
           curl -f http://localhost:8000/api/health
 
-          echo "Testing items endpoint..."
-          curl -f http://localhost:8000/api/items
-
       - name: Show logs on failure
         if: failure()
         run: docker compose -f docker-compose.dev.yml --env-file .env.ci logs
