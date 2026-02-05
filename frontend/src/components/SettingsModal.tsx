@@ -1,36 +1,95 @@
-import { createSignal } from 'solid-js';
+import { createSignal, createEffect, onCleanup } from 'solid-js';
 import Modal from './Modal';
+import { api } from '../lib/api';
 
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface Settings {
+  ai_context: string;
+  auto_sync: boolean;
+  usage_analytics: boolean;
+}
+
 export default function SettingsModal(props: SettingsModalProps) {
-  const [enableNotifications, setEnableNotifications] = createSignal(
-    localStorage.getItem('setting_enable_notifications') === 'true'
-  );
-  const [emailNotifications, setEmailNotifications] = createSignal(
-    localStorage.getItem('setting_email_notifications') === 'true'
-  );
-  const [notificationSound, setNotificationSound] = createSignal(
-    localStorage.getItem('setting_notification_sound') !== 'false'
-  );
   const [autoSync, setAutoSync] = createSignal(
     localStorage.getItem('setting_auto_sync') !== 'false'
-  );
-  const [compactMode, setCompactMode] = createSignal(
-    localStorage.getItem('setting_compact_mode') === 'true'
   );
   const [usageAnalytics, setUsageAnalytics] = createSignal(
     localStorage.getItem('setting_usage_analytics') !== 'false'
   );
+  const [aiContext, setAiContext] = createSignal(
+    localStorage.getItem('setting_ai_context') || ''
+  );
+  const [isLoading, setIsLoading] = createSignal(false);
+
+  // Fetch settings from backend when modal opens
+  createEffect(() => {
+    if (props.isOpen) {
+      fetchSettings();
+    }
+  });
+
+  const fetchSettings = async () => {
+    try {
+      setIsLoading(true);
+      const settings: Settings = await api.get('/settings');
+
+      setAiContext(settings.ai_context || '');
+      setAutoSync(settings.auto_sync);
+      setUsageAnalytics(settings.usage_analytics);
+
+      // Update localStorage cache
+      localStorage.setItem('setting_ai_context', settings.ai_context || '');
+      localStorage.setItem('setting_auto_sync', String(settings.auto_sync));
+      localStorage.setItem('setting_usage_analytics', String(settings.usage_analytics));
+    } catch (error) {
+      console.error('Failed to fetch settings:', error);
+      // Keep using localStorage values on error
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const saveSettings = async (updates: Partial<Settings>) => {
+    try {
+      await api.patch('/settings', updates);
+      console.log('Settings saved successfully');
+    } catch (error) {
+      console.error('Failed to save settings:', error);
+    }
+  };
 
   const handleToggle = (key: string, setter: (value: boolean) => void) => (e: InputEvent) => {
     const checked = (e.currentTarget as HTMLInputElement).checked;
     setter(checked);
     localStorage.setItem(`setting_${key}`, String(checked));
+
+    // Save to backend
+    const updates: Partial<Settings> = {};
+    if (key === 'auto_sync') updates.auto_sync = checked;
+    if (key === 'usage_analytics') updates.usage_analytics = checked;
+    saveSettings(updates);
   };
+
+  let textareaDebounceTimer: number | undefined;
+  const handleAiContextChange = (e: InputEvent) => {
+    const value = (e.currentTarget as HTMLTextAreaElement).value;
+    setAiContext(value);
+    localStorage.setItem('setting_ai_context', value);
+
+    // Debounce API call
+    clearTimeout(textareaDebounceTimer);
+    textareaDebounceTimer = setTimeout(() => {
+      saveSettings({ ai_context: value });
+    }, 1000) as unknown as number;
+  };
+
+  onCleanup(() => {
+    clearTimeout(textareaDebounceTimer);
+  });
 
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose} title="Settings" size="large">
@@ -59,75 +118,28 @@ export default function SettingsModal(props: SettingsModalProps) {
               </div>
             </div>
 
-            <div class="setting-row">
-              <div class="setting-label">
-                <span class="material-symbols-outlined icon-md">lock</span>
-                <div>
-                  <div class="setting-title">Password</div>
-                  <div class="setting-description">Change your account password</div>
-                </div>
-              </div>
-              <button class="btn btn-sm btn-secondary">Change Password</button>
-            </div>
           </div>
         </div>
 
-        {/* Notifications Section */}
+        {/* AI Assistant Section */}
         <div class="settings-section">
-          <h3 class="settings-section-title">Notifications</h3>
+          <h3 class="settings-section-title">AI Assistant</h3>
           <div class="settings-section-content">
-            <div class="setting-row">
+            <div class="setting-row" style={{ "flex-direction": "column", "align-items": "flex-start", gap: "0.75rem" }}>
               <div class="setting-label">
-                <span class="material-symbols-outlined icon-md">notifications</span>
+                <span class="material-symbols-outlined icon-md">psychology</span>
                 <div>
-                  <div class="setting-title">Enable Notifications</div>
-                  <div class="setting-description">Receive notifications for upcoming events and reminders</div>
+                  <div class="setting-title">Custom Context</div>
+                  <div class="setting-description">Provide additional context to help the AI assistant understand your preferences and needs</div>
                 </div>
               </div>
-              <label class="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={enableNotifications()}
-                  onInput={handleToggle('enable_notifications', setEnableNotifications)}
-                />
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div class="setting-row">
-              <div class="setting-label">
-                <span class="material-symbols-outlined icon-md">email</span>
-                <div>
-                  <div class="setting-title">Email Notifications</div>
-                  <div class="setting-description">Get email summaries of your daily tasks</div>
-                </div>
-              </div>
-              <label class="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={emailNotifications()}
-                  onInput={handleToggle('email_notifications', setEmailNotifications)}
-                />
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-
-            <div class="setting-row">
-              <div class="setting-label">
-                <span class="material-symbols-outlined icon-md">volume_up</span>
-                <div>
-                  <div class="setting-title">Notification Sound</div>
-                  <div class="setting-description">Play a sound when you receive notifications</div>
-                </div>
-              </div>
-              <label class="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={notificationSound()}
-                  onInput={handleToggle('notification_sound', setNotificationSound)}
-                />
-                <span class="toggle-slider"></span>
-              </label>
+              <textarea
+                class="textarea textarea-sm"
+                placeholder="E.g., I prefer meetings in the morning, I work on software engineering projects, I need reminders 30 minutes before events..."
+                value={aiContext()}
+                onInput={handleAiContextChange}
+                style={{ width: "100%", resize: "vertical" }}
+              />
             </div>
           </div>
         </div>
@@ -170,40 +182,6 @@ export default function SettingsModal(props: SettingsModalProps) {
                   type="checkbox"
                   checked={autoSync()}
                   onInput={handleToggle('auto_sync', setAutoSync)}
-                />
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Appearance Section */}
-        <div class="settings-section">
-          <h3 class="settings-section-title">Appearance</h3>
-          <div class="settings-section-content">
-            <div class="setting-row">
-              <div class="setting-label">
-                <span class="material-symbols-outlined icon-md">palette</span>
-                <div>
-                  <div class="setting-title">Theme</div>
-                  <div class="setting-description">Choose your color theme from the header</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="setting-row">
-              <div class="setting-label">
-                <span class="material-symbols-outlined icon-md">compress</span>
-                <div>
-                  <div class="setting-title">Compact Mode</div>
-                  <div class="setting-description">Reduce spacing for a denser interface</div>
-                </div>
-              </div>
-              <label class="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={compactMode()}
-                  onInput={handleToggle('compact_mode', setCompactMode)}
                 />
                 <span class="toggle-slider"></span>
               </label>
