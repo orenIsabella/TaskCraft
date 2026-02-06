@@ -1,5 +1,5 @@
 import { A } from '@solidjs/router';
-import { Show, createSignal } from 'solid-js';
+import { Show, createSignal, onMount, onCleanup } from 'solid-js';
 import type { JSX } from 'solid-js';
 import { auth } from '../lib/auth';
 import SettingsModal from './SettingsModal';
@@ -11,6 +11,7 @@ export default function Layout(props: { children?: JSX.Element }) {
   const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = createSignal(false);
   const [isTermsOpen, setIsTermsOpen] = createSignal(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = createSignal(false);
 
   const handleSettingsClick = (e: Event) => {
     e.preventDefault();
@@ -26,6 +27,36 @@ export default function Layout(props: { children?: JSX.Element }) {
     e.preventDefault();
     setIsTermsOpen(true);
   };
+
+  const handleLogout = async () => {
+    await auth.logout();
+    window.location.href = '/login';
+  };
+
+  const getInitials = (name?: string) => {
+    if (!name) return 'U';
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Close user menu when clicking outside
+  onMount(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const userMenu = document.querySelector('.user-menu-wrapper');
+      if (userMenu && !userMenu.contains(e.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    onCleanup(() => {
+      document.removeEventListener('click', handleClickOutside);
+    });
+  });
 
   return (
     <>
@@ -60,29 +91,53 @@ export default function Layout(props: { children?: JSX.Element }) {
                 <span class="material-symbols-outlined icon-lg">help</span>
               </A>
             </div>
-            <div id="user-menu">
+            <div id="user-menu" class="user-menu">
               <Show
                 when={auth.isAuthenticated()}
                 fallback={
                   <A href="/login" class="btn btn-sm btn-primary">Log In</A>
                 }
               >
-                <Show when={auth.state.isMockMode}>
-                  <span
-                    class="badge badge-warning"
-                    style="margin-right: 0.5rem;"
-                    title="Mock authentication active (dev mode)"
+                <div class="user-menu-wrapper">
+                  <button
+                    class="user-menu-button"
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen())}
+                    title={auth.state.user?.name || 'User'}
                   >
-                    DEMO
-                  </span>
-                </Show>
-                <div
-                  class="profile-picture"
-                  data-alt={auth.state.user?.name || 'User'}
-                  style={{
-                    'background-image': `url('${auth.state.user?.avatar || '/images/default-avatar.png'}')`
-                  }}
-                />
+                    <Show
+                      when={auth.state.user?.avatar}
+                      fallback={
+                        <div class="user-avatar user-avatar-initials">
+                          {getInitials(auth.state.user?.name)}
+                        </div>
+                      }
+                    >
+                      <div
+                        class="user-avatar"
+                        style={{
+                          'background-image': `url('${auth.state.user?.avatar}')`
+                        }}
+                      />
+                    </Show>
+                    <Show when={auth.state.isMockMode}>
+                      <span class="user-demo-badge">Demo</span>
+                    </Show>
+                  </button>
+
+                  <Show when={isUserMenuOpen()}>
+                    <div class="user-dropdown">
+                      <div class="user-dropdown-header">
+                        <div class="user-dropdown-name">{auth.state.user?.name}</div>
+                        <div class="user-dropdown-email">{auth.state.user?.email}</div>
+                      </div>
+                      <div class="user-dropdown-divider"></div>
+                      <button class="user-dropdown-item" onClick={handleLogout}>
+                        <span class="material-symbols-outlined icon-md">logout</span>
+                        <span>Log Out</span>
+                      </button>
+                    </div>
+                  </Show>
+                </div>
               </Show>
             </div>
           </div>

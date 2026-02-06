@@ -178,6 +178,16 @@
   background-color: var(--color-surface-highlight);
 }
 
+/* Ensure elements remain visible when row is hovered */
+.setting-row:hover .textarea {
+  background-color: var(--color-surface-dark);
+}
+
+.setting-row:hover .btn {
+  background-color: var(--color-surface-dark);
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+
 .setting-label {
   display: flex;
   align-items: center;

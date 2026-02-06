@@ -5,20 +5,36 @@ import { auth } from '../lib/auth';
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = createSignal('');
-  const [password, setPassword] = createSignal('');
+  const [verificationCode, setVerificationCode] = createSignal('');
+  const [step, setStep] = createSignal<'email' | 'code'>('email');
   const [isLoading, setIsLoading] = createSignal(false);
   const [isDemoLoading, setIsDemoLoading] = createSignal(false);
 
-  const handleSubmit = async (e: Event) => {
+  const handleEmailSubmit = async (e: Event) => {
     e.preventDefault();
 
     try {
       setIsLoading(true);
-      await auth.login(email(), password());
+      await auth.requestVerificationCode(email());
+      setStep('code');
+    } catch (error) {
+      console.error('Verification code request failed:', error);
+      alert('Failed to send verification code. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCodeSubmit = async (e: Event) => {
+    e.preventDefault();
+
+    try {
+      setIsLoading(true);
+      await auth.verifyCodeAndLogin(email(), verificationCode());
       navigate('/');
     } catch (error) {
       console.error('Login failed:', error);
-      alert('Login failed. Please check your credentials.');
+      alert('Invalid verification code. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -44,47 +60,93 @@ export default function Login() {
           <div class="blob-decorator"></div>
 
           <h1 class="heading-xl">Welcome Back</h1>
-          <p class="subtitle">Log in to continue organizing your life</p>
+          <p class="subtitle">
+            {step() === 'email'
+              ? 'Enter your email to receive a verification code'
+              : 'Enter the verification code sent to your email'}
+          </p>
 
-          <form onSubmit={handleSubmit} class="form-vertical">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                placeholder="you@example.com"
-                autocomplete="email"
-                value={email()}
-                onInput={(e) => setEmail(e.currentTarget.value)}
-              />
-            </div>
+          <Show when={step() === 'email'}>
+            <form onSubmit={handleEmailSubmit} class="form-vertical">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  value={email()}
+                  onInput={(e) => setEmail(e.currentTarget.value)}
+                />
+              </div>
 
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                placeholder="Enter your password"
-                autocomplete="current-password"
-                value={password()}
-                onInput={(e) => setPassword(e.currentTarget.value)}
-              />
-            </div>
+              <div class="form-actions">
+                <button
+                  type="submit"
+                  class="btn btn-lg btn-primary btn-full-width"
+                  disabled={isLoading()}
+                >
+                  {isLoading() ? 'Sending Code...' : 'Send Verification Code'}
+                </button>
+              </div>
+            </form>
+          </Show>
 
-            <div class="form-actions">
-              <button
-                type="submit"
-                class="btn btn-lg btn-primary btn-full-width"
-                disabled={isLoading()}
-              >
-                {isLoading() ? 'Logging In...' : 'Log In'}
-              </button>
-            </div>
-          </form>
+          <Show when={step() === 'code'}>
+            <form onSubmit={handleCodeSubmit} class="form-vertical">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email-display"
+                  name="email"
+                  disabled
+                  value={email()}
+                  style={{ background: 'var(--color-background-subtle)' }}
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="code">Verification Code</label>
+                <input
+                  type="text"
+                  id="code"
+                  name="code"
+                  required
+                  placeholder="Enter 6-digit code"
+                  autocomplete="one-time-code"
+                  pattern="[0-9]*"
+                  maxlength="6"
+                  value={verificationCode()}
+                  onInput={(e) => setVerificationCode(e.currentTarget.value)}
+                />
+              </div>
+
+              <div class="form-actions" style={{ display: 'flex', gap: '0.5rem' }}>
+                <button
+                  type="button"
+                  class="btn btn-lg btn-secondary"
+                  onClick={() => {
+                    setStep('email');
+                    setVerificationCode('');
+                  }}
+                  disabled={isLoading()}
+                >
+                  Back
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-lg btn-primary"
+                  style={{ flex: 1 }}
+                  disabled={isLoading()}
+                >
+                  {isLoading() ? 'Verifying...' : 'Verify & Log In'}
+                </button>
+              </div>
+            </form>
+          </Show>
 
           <Show when={auth.isMockEnvironment()}>
             <div class="mock-auth-section">
