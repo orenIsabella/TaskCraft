@@ -1,6 +1,7 @@
 import { createSignal, createEffect, onCleanup } from 'solid-js';
 import Modal from './Modal';
 import { api } from '../lib/api';
+import { useToast } from './Toast';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ interface Settings {
 }
 
 export default function SettingsModal(props: SettingsModalProps) {
+  const { showToast } = useToast();
   const [autoSync, setAutoSync] = createSignal(
     localStorage.getItem('setting_auto_sync') !== 'false'
   );
@@ -47,7 +49,7 @@ export default function SettingsModal(props: SettingsModalProps) {
       localStorage.setItem('setting_usage_analytics', String(settings.usage_analytics));
     } catch (error) {
       console.error('Failed to fetch settings:', error);
-      // Keep using localStorage values on error
+      showToast('Failed to load settings. Using cached values.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -56,9 +58,10 @@ export default function SettingsModal(props: SettingsModalProps) {
   const saveSettings = async (updates: Partial<Settings>) => {
     try {
       await api.patch('/settings', updates);
-      console.log('Settings saved successfully');
+      showToast('Settings saved successfully', 'success');
     } catch (error) {
       console.error('Failed to save settings:', error);
+      showToast('Failed to save settings. Please try again.', 'error');
     }
   };
 
@@ -138,6 +141,7 @@ export default function SettingsModal(props: SettingsModalProps) {
                 placeholder="E.g., I prefer meetings in the morning, I work on software engineering projects, I need reminders 30 minutes before events..."
                 value={aiContext()}
                 onInput={handleAiContextChange}
+                disabled={isLoading()}
                 style={{ width: "100%", resize: "vertical" }}
               />
             </div>
@@ -182,6 +186,7 @@ export default function SettingsModal(props: SettingsModalProps) {
                   type="checkbox"
                   checked={autoSync()}
                   onInput={handleToggle('auto_sync', setAutoSync)}
+                  disabled={isLoading()}
                 />
                 <span class="toggle-slider"></span>
               </label>
@@ -206,6 +211,7 @@ export default function SettingsModal(props: SettingsModalProps) {
                   type="checkbox"
                   checked={usageAnalytics()}
                   onInput={handleToggle('usage_analytics', setUsageAnalytics)}
+                  disabled={isLoading()}
                 />
                 <span class="toggle-slider"></span>
               </label>
