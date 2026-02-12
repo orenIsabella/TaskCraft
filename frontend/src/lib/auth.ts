@@ -114,6 +114,33 @@ export const auth = {
     }
   },
 
+  async requestVerificationCode(email: string) {
+    try {
+      const response = await api.post('/auth/request-code', { email });
+      return response;
+    } catch (error) {
+      console.error('Verification code request failed:', error);
+      throw error;
+    }
+  },
+
+  async verifyCodeAndLogin(email: string, code: string) {
+    try {
+      const response = await api.post('/auth/verify-code', { email, code });
+
+      if (response.token && response.user) {
+        setAuthState({ token: response.token, user: response.user, isMockMode: false });
+        saveAuthState();
+        api.setAuthToken(response.token);
+      }
+
+      return response;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
+  },
+
   async login(email: string, password: string) {
     try {
       const response = await api.post('/auth/login', { email, password });

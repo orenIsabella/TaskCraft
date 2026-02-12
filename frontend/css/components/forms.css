@@ -68,6 +68,19 @@
   border-color: var(--color-primary);
 }
 
+/* Textarea Small - for modals and compact layouts */
+.textarea-sm {
+  min-height: 120px;
+  padding: 1rem;
+  font-size: var(--text-base);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.textarea-sm:focus {
+  border-color: var(--color-border-hover);
+}
+
 /* Text Input */
 .form-vertical .form-group input {
   width: 100%;

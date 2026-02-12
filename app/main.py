@@ -35,6 +35,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include routers
+from app.routers import settings as settings_router
+app.include_router(settings_router.router)
+
 @app.get("/api/health")
 async def health():
     """Health check endpoint with database connectivity test"""
