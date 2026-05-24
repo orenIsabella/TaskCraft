@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 from contextlib import asynccontextmanager
 from app.config import settings
-from app.database import engine
+from app.database import engine, Base
+from app.models import TaskInput
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+@app.on_event("startup")
+async def on_startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 # CORS if needed during development
 app.add_middleware(
